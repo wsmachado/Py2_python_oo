@@ -1,3 +1,5 @@
+from modelos.avaliacao import Avalicao
+
 # para criar uma classe no python utilziamos a instancia class nome(), como padrao utilizamo a primira letra da classe maiuscula
 # __inti__ garante que quando a classe seja criada as variaveis dadas sejam semore estanciadas
 # __str__ caso precise mostra o obejto no formato de texxto, geralmete o espaço da memoria que esta alocado, ele mostra oq vai ser passdo no __str__
@@ -14,6 +16,8 @@ class Restaurante:
         # self.ativo = False
         # Ao colocar o underscore antes do ativo (_ativo), estamos dizendo que ele é um atriuto privado e que n estamos esperando que as pessoas o acessem diretamente (POR CONVENSAO)
         self._ativo = False
+        # Receberar uma lista de avalicaoes dos clientes ja que cada objeto pode ter mais de uma avaliaco
+        self._avaliacao = []
         # Toda vez que criar um objeto Restaurante, ira colar ele dentro da lista restaurantes
         Restaurante.restaurantes.append(self)
     
@@ -25,9 +29,10 @@ class Restaurante:
     #por convesao colocamos nesse um argumetno cls
     @classmethod
     def lista_restaurante(cls):
-        print(f'{'Nome do Restaurante'.ljust(25)} | {'Categoria do Restaurante'.ljust(25)} | Status do Restaurante')
+        print(f'\n{'Nome do Restaurante'.ljust(25)} | {'Categoria do Restaurante'.ljust(25)} | {'Avaliações'.ljust(25)} | Status do Restaurante')
         for restaurante in cls.restaurantes:
-            print(f'{restaurante._nome.ljust(25)} | {restaurante._categoria.ljust(25)} | {restaurante.ativo}')
+            print(f'{restaurante._nome.ljust(25)} | {restaurante._categoria.ljust(25)} | {str(restaurante.media_notas).ljust(25)} | {restaurante.ativo}')
+        print()
 
     # Sempre que utilizarmos @property, queremos modificar como aquele atributo vai ser lido
     # para funcionar o atriuto ativo deve ser privado, ja que ele n ira ser passado no self pelos clientes, caso contrario apecera o seguinte erro "a propriedade ativo não tem um setter".
@@ -36,9 +41,27 @@ class Restaurante:
     def ativo(self):
         return '☑' if self._ativo else '☐'
 
-
     def alterar_status(self):
         self._ativo = not self._ativo
+
+    # metodo que recee as avaliacoes
+    def receber_avaliacao(self,  cliente, nota):
+        if 0 <= nota <= 5:
+            avaliacao = Avalicao(cliente, nota)
+            self._avaliacao.append(avaliacao)
+
+    # Criar o @property para calcular a media das avaliacaoes de cada restaurante
+    @property
+    def media_notas(self):
+        if not self._avaliacao:
+            return '-'
+        
+        soma_notas = sum(avaliacao._nota for avaliacao in self._avaliacao)
+        qtd_avaliacao = len(self._avaliacao)
+        media = round(soma_notas / qtd_avaliacao, 1)
+
+        return media
+
 
 
 # NAO IREMOS MAIS UTILIZAR ESSA CODIGO PARA ESTANCIAR AS CLASSES CRIAREMOS UM CODIGO APP.PY
