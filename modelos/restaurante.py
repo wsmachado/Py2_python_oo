@@ -18,6 +18,7 @@ class Restaurante:
         self._ativo = False
         # Receberar uma lista de avalicaoes dos clientes ja que cada objeto pode ter mais de uma avaliaco
         self._avaliacao = []
+        self._cardapio = []
         # Toda vez que criar um objeto Restaurante, ira colar ele dentro da lista restaurantes
         Restaurante.restaurantes.append(self)
     
@@ -61,6 +62,12 @@ class Restaurante:
         media = round(soma_notas / qtd_avaliacao, 1)
 
         return media
+    
+    def adicionar_bebida(self, bebida):
+        self._cardapio.append(bebida)
+
+    def adicionar_prato(self, prato):
+        self._cardapio.append(prato)
 
 
 
