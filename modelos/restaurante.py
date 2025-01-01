@@ -1,4 +1,5 @@
 from modelos.avaliacao import Avalicao
+from modelos.cardapio.item_cardapio import ItemCardapio
 
 # para criar uma classe no python utilziamos a instancia class nome(), como padrao utilizamo a primira letra da classe maiuscula
 # __inti__ garante que quando a classe seja criada as variaveis dadas sejam semore estanciadas
@@ -63,11 +64,29 @@ class Restaurante:
 
         return media
     
-    def adicionar_bebida(self, bebida):
-        self._cardapio.append(bebida)
 
-    def adicionar_prato(self, prato):
-        self._cardapio.append(prato)
+    #Aqui utilizamos a funcao isintance, que basicam verifica se o item que passamos no argumento é uma instancia da classe ItemCardapio
+    #Ja que utilizamos ItemCardapio como uma classe mae, o isinstance retornarar verdadeiro tbm para a classe de bebida e comida
+    def adicionar_item_cardapio(self, item):
+        if isinstance(item, ItemCardapio):
+            self._cardapio.append(item)
+
+    
+    # Criaremos uma propriedade para printar o cardapio, ja que n precisa de nenhuma manipulacao dos dados
+    @property
+    def mostrar_cardapio(self):
+        print(f'\nCardapido do restaurante, {self._nome}:\n')
+        # a classe enumerate enumera os itens na lista pssada, no qual abaixo, o i sera o indece e o item o elemento da lista
+        for i, item in enumerate(self._cardapio, start=1):
+            # a funcao hasattr verifica se um atriuto especifico esta dentro de uma lisa
+            if hasattr(item, '_descricao'):
+                msg_prato = f'{i}. Nome: {item._nome} | Preço: {item._preco} | Descrição: {item._descricao}'
+                print(msg_prato)
+            elif hasattr(item, '_tamanho'):
+                msg_bebida = f'{i}. Nome: {item._nome} | Preço: {item._preco} | Tamanho: {item._tamanho}'
+                print(msg_bebida)
+        print()
+
 
 
 
